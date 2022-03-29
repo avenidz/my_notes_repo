@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/thisHome"
+        android:enabled="true"
+        android:title="@string/nav_list"
+        android:icon="@drawable/todo_list"/>
+    <item
+        android:id="@+id/thisCheck"
+        android:enabled="true"
+        android:title="@string/nav_checked"
+        android:icon="@drawable/todo_check"/>
+    <item
+        android:id="@+id/thisUncheck"
+        android:enabled="true"
+        android:title="@string/nav_unchecked"
+        android:icon="@drawable/todo_uncheck"/>
+
+
+</menu>

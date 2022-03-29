@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/thisHome">
+    <fragment
+        android:id="@+id/thisHome"
+        android:name="com.example.testapp.HomeFragment"
+        android:label="My Notes"
+        tools:layout="@layout/fragment_this_home" />
+    <fragment
+        android:id="@+id/thisCheck"
+        android:name="com.example.testapp.CheckFragment"
+        android:label="Checked Items"
+        tools:layout="@layout/fragment_this_check" />
+    <fragment
+        android:id="@+id/thisUncheck"
+        android:name="com.example.testapp.UnCheckFragment"
+        android:label="Un-check Items"
+        tools:layout="@layout/fragment_this_uncheck" />
+</navigation>

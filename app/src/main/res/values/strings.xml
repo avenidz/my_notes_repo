@@ -21,4 +21,8 @@
     <string name="nav_checked">Checked</string>
     <string name="nav_unchecked">Un-checked</string>
 
+    <!-- activity addTodo -->
+    <string name="add_taskName">Task Name</string>
+    <string name="ad_taskDetails">Details</string>
+
 </resources>

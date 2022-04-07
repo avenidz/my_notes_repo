@@ -11,6 +11,8 @@ Features:
 - Only view done or checked notes/task.
 - Only view all un-checked notes/task.
 - You can delete notes/task that is done already.
+- Notification
+    -> notify every 7am
 
 ![Screenshot_2022-03-29-19-10-00-26_755b592f45b90ef2abacbe9f8a8543b8](https://user-images.githubusercontent.com/71166643/160816328-8f4d1067-7782-4da8-aebe-c89f2709ce6f.jpg)
 ![Screenshot_2022-03-29-19-11-18-04_755b592f45b90ef2abacbe9f8a8543b8](https://user-images.githubusercontent.com/71166643/160816345-75e8d77e-a2e8-41aa-8424-9e9659756479.jpg)

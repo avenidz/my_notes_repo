@@ -11,9 +11,9 @@
         android:id="@+id/recycleView"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_view_todo"
-        android:background="@null"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        />
 
     <!--creating floating button-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton

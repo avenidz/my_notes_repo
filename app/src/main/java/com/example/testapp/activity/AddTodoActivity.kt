@@ -3,51 +3,62 @@ package com.example.testapp.activity
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.testapp.R
+import androidx.lifecycle.lifecycleScope
+import com.example.testapp.databinding.ActivityAddTodoBinding
 import com.example.testapp.todoData.Todo
 import com.example.testapp.todoData.TodoListDatabase
+import com.example.testapp.viewModel.AddTodoModel
+import kotlinx.coroutines.flow.collect
 
 class AddTodoActivity : AppCompatActivity() {
 
     private lateinit var todoDatabase: TodoListDatabase
 
-    private lateinit var todoName: EditText
-    private lateinit var todoDetails: EditText
-    private lateinit var saveButton: Button
+
+    private lateinit var binding: ActivityAddTodoBinding
+    private val viewModel: AddTodoModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_todo)
+        binding = ActivityAddTodoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         todoDatabase = TodoListDatabase.getInstance(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        todoName = findViewById(R.id.todoName)
-        todoDetails = findViewById(R.id.todoDetails)
-        saveButton = findViewById(R.id.saveButton)
+
 
         title = "Add new list"
 
-        val todoNameValue = todoName.getText()
-        val todoDetailsValue = todoDetails.getText()
+        binding.saveButton.setOnClickListener{
+            viewModel.addTodoNotes(
+                binding.todoName.text.toString(),
+                binding.todoDetails.text.toString()
+            )
+        }
+        lifecycleScope.launchWhenStarted {
+            viewModel.addTodoState.collect {
+                when(it){
+                    is AddTodoModel.AddTodo.Success -> {
+                        val todo = Todo(0, binding.todoName.text.toString(), false)
+                        todo.detail = binding.todoDetails.text.toString()
+                        todoDatabase.getTodoDao().saveTodo(todo)
 
-        saveButton.setOnClickListener {
-            if (todoNameValue == null || todoNameValue.toString() == "") {
-                Toast.makeText(this, "Task name required.", Toast.LENGTH_SHORT).show()
-            } else if (todoDetailsValue == null || todoDetailsValue.toString() == "") {
-                Toast.makeText(this, "Details required.", Toast.LENGTH_SHORT).show()
-            } else {
-                val todo = Todo(0, todoNameValue.toString(), false)
-                todo.detail = todoDetailsValue.toString()
-                todoDatabase.getTodoDao().saveTodo(todo)
-                todoName.text.clear()
-                todoDetails.text.clear()
+                        binding.todoName.text.clear()
+                        binding.todoDetails.text.clear()
+
+                        Toast.makeText(binding.saveButton.context, "Success", Toast.LENGTH_SHORT).show()
+                    }
+                    is AddTodoModel.AddTodo.Error -> {
+                        Toast.makeText(binding.saveButton.context, it.message, Toast.LENGTH_SHORT).show()
+                    }
+
+                    else -> Unit
+                }
             }
-
         }
 
     }

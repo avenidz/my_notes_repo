@@ -2,31 +2,30 @@ package com.example.testapp.activity
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.testapp.R
+import androidx.lifecycle.lifecycleScope
 import com.example.testapp.UpdateTaskName
+import com.example.testapp.databinding.ActivityEditTodoBinding
 import com.example.testapp.todoData.TodoListDatabase
+import com.example.testapp.viewModel.EditTodoModel
+import kotlinx.coroutines.flow.collect
 
 class EditTodoActivity : AppCompatActivity(), UpdateTaskName{
 
-    private lateinit var getName : TextView
-    private lateinit var getDetail : TextView
-    private lateinit var updateButton : Button
     private lateinit var todoDatabase : TodoListDatabase
+
+    private lateinit var binding: ActivityEditTodoBinding
+    private val viewModel: EditTodoModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_todo)
+        binding = ActivityEditTodoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        getName = findViewById(R.id.todoName)
-        getDetail = findViewById(R.id.todoDetails)
-        updateButton  = findViewById(R.id.saveButton)
 
         val taskId = intent.getStringExtra("todoId")
         val taskName = intent.getStringExtra("todoName")
@@ -37,32 +36,34 @@ class EditTodoActivity : AppCompatActivity(), UpdateTaskName{
         title = "Edit Task"
 
         //display task name and details to edit
-        getName.text = taskName
-        getDetail.text = taskDetails
+        binding.todoName.setText(taskName)
+        binding.todoDetails.setText(taskDetails)
 
-        //update value
-        updateButton.setOnClickListener{
-            val taskNameUpdate = getName.text
-            val taskDetailUpdate = getDetail.text
-            if(taskNameUpdate == null || taskNameUpdate.toString() == ""){
-                Toast.makeText(this, "Task name required.",Toast.LENGTH_SHORT).show()
-            }else if(taskDetailUpdate == null || taskDetailUpdate.toString() == ""){
-                Toast.makeText(this, "Task details required", Toast.LENGTH_SHORT).show()
-            }else if(taskNameUpdate.toString() == taskName && taskDetailUpdate.toString() == taskDetails.toString()){
-                Toast.makeText(this, "No changes made.", Toast.LENGTH_SHORT).show()
-//            }else if(taskDetailUpdate.toString() == taskDetails.toString()){
-//                Toast.makeText(this, "No changes made for details.", Toast.LENGTH_SHORT).show()
-            }else{
+        binding.saveButton.setOnClickListener{
+            viewModel.editTodoNotes(
+                binding.todoName.text.toString(),
+                binding.todoDetails.text.toString(),
+                taskName, taskDetails
+            )
+        }
+        lifecycleScope.launchWhenStarted {
+            viewModel.editTodoState.collect{
+                when(it){
+                    is EditTodoModel.EditTodo.Success ->{
+                        //update value
+                        val taskToUpdate = listOf(taskId.toString(), binding.todoName.text.toString(),taskCheck.toString(), binding.todoDetails.text.toString())
+                        onUpdateTask(taskToUpdate,todoDatabase)
 
-                val taskToUpdate = listOf(taskId.toString(), taskNameUpdate.toString(),taskCheck.toString(), taskDetailUpdate.toString())
-                onUpdateTask(taskToUpdate,todoDatabase)
+                        binding.todoName.text.clear()
+                        binding.todoDetails.text.clear()
 
-
-                getName.text = ""
-                getDetail.text = ""
-
-
-                onBackPressed()
+                        onBackPressed()
+                    }
+                    is EditTodoModel.EditTodo.Error ->{
+                        Toast.makeText(binding.saveButton.context, it.message, Toast.LENGTH_SHORT).show()
+                    }
+                    else -> Unit
+                }
             }
         }
     }

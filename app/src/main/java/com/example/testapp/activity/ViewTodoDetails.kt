@@ -1,11 +1,9 @@
 package com.example.testapp.activity
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -16,7 +14,6 @@ import com.example.testapp.todoData.Todo
 import com.example.testapp.todoData.TodoListDatabase
 import com.example.testapp.todoData.ViewTodoAdapter
 import com.example.testapp.viewModel.TodoViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ViewTodoDetails : AppCompatActivity() {
 

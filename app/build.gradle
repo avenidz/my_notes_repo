@@ -16,9 +16,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildFeatures{
-        viewBinding true
-    }
     buildTypes {
         release {
             minifyEnabled false
@@ -62,7 +59,7 @@ dependencies {
 
 
 // For BottomNavigationView from Material Components
-    implementation 'com.google.android.material:material:1.0.0'
+//    implementation 'com.google.android.material:material:1.0.0'
 
     //room database
     def room_version = "2.3.0-alpha03"
